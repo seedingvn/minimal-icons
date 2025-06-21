@@ -7,11 +7,8 @@ import {
   ArrowDownAZ,
   ArrowUpAZ,
   Palette,
-  Shuffle,
   Sun,
   Moon,
-  Grid3X3,
-  List,
   Download,
   X,
   Copy,
@@ -19,7 +16,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   Dialog,
@@ -244,7 +241,6 @@ export default function IconGrid({ icons }: { icons: Icon[] }) {
                 onCopyColor={() => handleCopy(icon.color, icon.slug, "color")}
                 onCopySvg={() => handleCopy(icon.svgContent, icon.slug, "svg")}
                 onDownloadSvg={() => handleDownload(icon, "SVG")}
-                onDownloadPng={() => handleDownload(icon, "PNG")}
               />
             ))}
           </div>
@@ -305,7 +301,6 @@ function IconCard({
   onCopyColor,
   onCopySvg,
   onDownloadSvg,
-  onDownloadPng,
   isColorCopied,
   isSvgCopied,
 }: {
@@ -314,7 +309,6 @@ function IconCard({
   onCopyColor: () => void;
   onCopySvg: () => void;
   onDownloadSvg: () => void;
-  onDownloadPng: () => void;
   isColorCopied: boolean;
   isSvgCopied: boolean;
 }) {

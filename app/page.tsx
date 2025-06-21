@@ -67,7 +67,7 @@ function getIconData() {
       }
       return null;
     })
-    .filter(Boolean);
+    .filter((icon): icon is { slug: string; name: string; color: string; svgContent: string } => icon !== null);
 
   return allIcons;
 }
