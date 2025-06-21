@@ -1,103 +1,79 @@
-import Image from "next/image";
+// File: app/page.tsx
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+import fs from "fs";
+import path from "path";
+import IconGrid from "./icon-grid"; // Import component "phòng ăn"
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+// --- HÀM TRỢ GIÚP ĐỂ TẠO SLUG CHUẨN ---
+function slugify(title: string): string {
+    return title
+      .toLowerCase()
+      .replace(/\+/g, "plus")
+      .replace(/\./g, "dot")
+      .replace(/&/g, "and")
+      .replace(/đ/g, "d")
+      .replace(/ħ/g, "h")
+      .replace(/ı/g, "i")
+      .replace(/ĸ/g, "k")
+      .replace(/ŀ/g, "l")
+      .replace(/ł/g, "l")
+      .replace(/ß/g, "ss")
+      .replace(/ŧ/g, "t")
+      // Remove all non-alphanumeric characters except for dashes
+      .replace(/[^a-z0-9-]/g, "");
+}
+// -----------------------------------------
+
+function getIconData() {
+  // 1. Đọc file JSON chứa thông tin chi tiết
+  const jsonPath = path.join(process.cwd(), "simple-icons.json");
+  const jsonFileContent = fs.readFileSync(jsonPath, "utf8");
+  const jsonData = JSON.parse(jsonFileContent);
+  const iconsData = Array.isArray(jsonData) ? jsonData : jsonData.icons || [];
+
+  // --- TẠO "TỪ ĐIỂN" DỮ LIỆU MỘT CÁCH CHUẨN XÁC ---
+  // Key của "từ điển" này sẽ là slug được tạo ra theo đúng quy tắc
+  const dataMap = new Map();
+  for (const icon of iconsData) {
+    // Ưu tiên dùng slug có sẵn trong file JSON, nếu không có thì tạo ra từ title
+    const key = icon.slug || slugify(icon.title);
+    dataMap.set(key, icon);
+  }
+  // ----------------------------------------------------
+
+  // 2. Lấy danh sách file SVG làm nguồn chính
+  const iconsDirectory = path.join(process.cwd(), "public", "icons");
+  const svgFilenames = fs.readdirSync(iconsDirectory);
+
+  // 3. Kết hợp dữ liệu
+  const allIcons = svgFilenames
+    .map((filename) => {
+      if (filename.endsWith(".svg")) {
+        const slug = filename.replace(/\.svg$/, "");
+        const filePath = path.join(iconsDirectory, filename);
+        const svgContent = fs.readFileSync(filePath, "utf8");
+
+        // Tra cứu thông tin bổ sung từ "từ điển" đã tạo
+        const extraData = dataMap.get(slug);
+
+        return {
+          slug: slug,
+          // Nếu tìm thấy trong JSON thì dùng tên chuẩn, nếu không thì dùng tên từ file
+          name: extraData ? extraData.title : (slug.charAt(0).toUpperCase() + slug.slice(1)),
+          // Nếu tìm thấy trong JSON thì dùng màu chuẩn, nếu không thì dùng màu đen
+          color: extraData ? `#${extraData.hex}` : "#000000",
+          svgContent: svgContent,
+        };
+      }
+      return null;
+    })
+    .filter(Boolean);
+
+  return allIcons;
+}
+
+// Component trang chủ không thay đổi
+export default function Page() {
+  const allIcons = getIconData();
+  return <IconGrid icons={allIcons} />;
 }
