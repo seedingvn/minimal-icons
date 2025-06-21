@@ -5,14 +5,41 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next"; // <<< DÒNG MỚI SỐ 1
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
+// --- SEO METADATA IN ENGLISH ---
 export const metadata: Metadata = {
-  title: "Minimal Icons - Free SVG icons for popular brands",
-  description: "Hơn 3300+ icon SVG cho các thương hiệu nổi tiếng, dễ dàng tìm kiếm, sao chép và tải xuống.",
+  title: {
+    default: "Minimal Icons - Free SVG icons for popular brands",
+    template: "%s | Minimal Icons",
+  },
+  description: "Over 3300+ SVG icons for popular brands, easy to search, copy, and download.",
+  keywords: ["simple icons", "minimal icons", "svg icons", "free icons", "brand logos", "vector icons", "logo svg", "facebook logo svg", "tiktok logo svg", "youtube logo svg", "google logo svg"],
+  openGraph: {
+    title: "Minimal Icons - Free SVG icons for popular brands",
+    description: "A collection of over 3300+ free SVG icons for popular brands.",
+    url: "https://www.minimalicons.store/",
+    siteName: "Minimal Icons",
+    images: [
+      {
+        url: "https://www.minimalicons.store/icon.png", // <<<< REPLACE WITH YOUR PREVIEW IMAGE LINK
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: "en_US", // Changed to English (US)
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Minimal Icons - Free SVG icons for popular brands",
+    description: "A collection of over 3300+ free SVG icons for popular brands.",
+    images: ["https://www.minimalicons.store/icon.png"], // <<<< REPLACE WITH YOUR PREVIEW IMAGE LINK
+  },
 };
+// ------------------------------------
 
 export default function RootLayout({
   children,
@@ -20,7 +47,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" suppressHydrationWarning={true}>
+    // --- CHANGE LANGUAGE TO ENGLISH ---
+    <html lang="en" suppressHydrationWarning={true}>
       <head>
         {/* Google Tag Manager */}
         <Script id="google-tag-manager" strategy="afterInteractive">
@@ -32,10 +60,8 @@ export default function RootLayout({
             })(window,document,'script','dataLayer','GTM-K6LWGW9X');
           `}
         </Script>
-        {/* End Google Tag Manager */}
       </head>
       <body className={inter.className}>
-        {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-K6LWGW9X"
@@ -44,11 +70,10 @@ export default function RootLayout({
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
         </noscript>
-        {/* End Google Tag Manager (noscript) */}
         
         {children}
         <Analytics />
-        <SpeedInsights /> {/* <<< DÒNG MỚI SỐ 2 */}
+        <SpeedInsights />
       </body>
     </html>
   );
