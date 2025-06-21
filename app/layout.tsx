@@ -1,8 +1,11 @@
+// File: app/layout.tsx
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
-import { Analytics } from "@vercel/analytics/react"; // <<< DÒNG MỚI SỐ 1
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next"; // <<< DÒNG MỚI SỐ 1
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,7 +47,8 @@ export default function RootLayout({
         {/* End Google Tag Manager (noscript) */}
         
         {children}
-        <Analytics /> {/* <<< DÒNG MỚI SỐ 2 */}
+        <Analytics />
+        <SpeedInsights /> {/* <<< DÒNG MỚI SỐ 2 */}
       </body>
     </html>
   );
