@@ -191,7 +191,7 @@ export default function IconGrid({ icons }: { icons: Icon[] }) {
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 h-4 w-4" />
             <Input
-              placeholder="Tìm kiếm icon..."
+              placeholder="Search icons..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 pr-10 bg-white dark:bg-slate-800 dark:border-slate-700"
